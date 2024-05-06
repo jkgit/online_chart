@@ -210,19 +210,27 @@ function getTileURLMarine(url, coordinates) {
   }
 }
 
-const markerStyle = new ol.style.Style({
-  image: new ol.style.Icon({
-    src: "resources/icons/Needle_Red_32.png",
-    size: [32, 32],
-    anchor: [0.5, 1],
-  }),
-});
+function markerStyle() {
+  icon = "resources/icons/Needle_Red_32.png";
+  ms = new ol.style.Style({
+    image: new ol.style.Icon({
+      src: icon,
+//      scale: 0.15,
+//      rotation: -1.56,
+      size: [300, 100],
+      anchor: [0.5, 1],
+    }),
+  });
+  return ms;
+}
 
-function addMarker(layer, lon, lat, popupContentHTML) {
+function addMarker(layer, lon, lat, popupContentHTML, marker) {
   const coord = ol.proj.fromLonLat([lon, lat]);
   var feature = new ol.Feature(new ol.geom.Point(coord));
   feature.set("popupContentHTML", popupContentHTML);
-  feature.setStyle(markerStyle);
+  if (!marker)
+    marker = markerStyle();
+  feature.setStyle(marker);
   layer.getSource().addFeature(feature);
   return feature;
 }
